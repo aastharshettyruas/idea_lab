@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#f5fbf7" />
+<title>MealMates — Order Together. Save Together.</title>
+<style>
+:root{
+ --ink:#18352d;--muted:#6d827a;--green:#247a5b;--green2:#dff2e8;--mint:#eff8f2;
+ --cream:#fbfaf5;--line:#e3ece5;--white:#fff;--orange:#f1a45d;--red:#c75d56;
+ --shadow:0 12px 32px rgba(30,74,55,.08);--radius:20px;
+}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+.app{display:flex;min-height:100vh}.sidebar{width:250px;background:#f0f7f1;border-right:1px solid var(--line);padding:26px 18px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:11px;padding:0 9px}.logo{width:42px;height:42px;border-radius:14px;background:var(--green);display:grid;place-items:center;color:white;font-size:22px}
+.brand strong{display:block;font-size:19px;letter-spacing:-.5px}.brand small{color:var(--muted);font-size:11px}
+.nav{display:grid;gap:7px}.nav button{background:transparent;text-align:left;padding:12px 14px;border-radius:13px;color:#577067;display:flex;align-items:center;gap:12px;font-weight:600}
+.nav button.active,.nav button:hover{background:white;color:var(--green);box-shadow:0 4px 15px #1d53300c}.nav .ico{width:20px;text-align:center;font-size:17px}
+.side-note{margin-top:auto;background:white;border:1px solid var(--line);border-radius:17px;padding:16px}.side-note b{font-size:13px}.side-note p{font-size:12px;color:var(--muted);margin:7px 0 12px}
+.main{flex:1;min-width:0}.topbar{height:78px;display:flex;align-items:center;justify-content:space-between;padding:0 38px;border-bottom:1px solid var(--line);background:#ffffffb8;backdrop-filter:blur(12px);position:sticky;top:0;z-index:5}
+.location{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px}.location b{color:var(--ink)}.top-actions{display:flex;align-items:center;gap:12px}.avatar{width:37px;height:37px;border-radius:50%;background:#f6dfc9;color:#81512e;display:grid;place-items:center;font-weight:800}
+.content{max-width:1240px;margin:auto;padding:34px 38px 60px}.page{display:none}.page.active{display:block}
+.eyebrow{color:var(--green);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+h1{font-size:clamp(28px,4vw,42px);line-height:1.12;letter-spacing:-1.5px;margin:8px 0 12px}h2{font-size:23px;letter-spacing:-.6px;margin:0}h3{font-size:16px;margin:0}
+.sub{color:var(--muted);max-width:620px;margin:0}
+.hero{background:linear-gradient(115deg,#e6f4e9,#f7f4e8);border:1px solid #e0eddf;border-radius:26px;padding:32px;display:grid;grid-template-columns:1.35fr .65fr;gap:25px;overflow:hidden;position:relative}
+.hero h1{max-width:570px}.hero-art{display:flex;align-items:center;justify-content:center;min-height:170px;position:relative}
+.food-circle{width:190px;height:190px;border-radius:50%;background:#fff9e9;display:grid;place-items:center;font-size:86px;box-shadow:0 20px 40px #416d411c;transform:rotate(-7deg)}
+.floating{position:absolute;background:white;padding:10px 13px;border-radius:13px;box-shadow:var(--shadow);font-size:12px;font-weight:700}.float1{top:12px;left:0}.float2{bottom:12px;right:0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.btn{padding:11px 17px;border-radius:12px;font-weight:750;transition:.15s}.btn.primary{background:var(--green);color:white}.btn.primary:hover{background:#1b6248;transform:translateY(-1px)}.btn.secondary{background:white;border:1px solid var(--line);color:var(--ink)}.btn.ghost{background:var(--green2);color:var(--green)}.btn.small{padding:8px 12px;font-size:12px;border-radius:10px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0 32px}.stat,.panel,.card{background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 5px 20px #244b3310}
+.stat{padding:17px 18px}.stat span{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:25px;margin-top:5px;letter-spacing:-.7px}.stat em{font-style:normal;color:var(--green);font-size:11px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:28px 0 15px}.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{padding:18px}.card-top{display:flex;justify-content:space-between;align-items:start;gap:10px}.restaurant-icon{width:46px;height:46px;border-radius:14px;background:#fff2e3;display:grid;place-items:center;font-size:24px}.pill{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:30px;background:var(--green2);color:var(--green);font-size:10px;font-weight:800}.pill.orange{background:#fff1df;color:#a86420}.pill.gray{background:#f0f3f1;color:#63756d}
+.card h3{margin:14px 0 3px}.meta{color:var(--muted);font-size:12px}.progress-wrap{margin:15px 0 8px}.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:7px}.progress{height:8px;background:#edf2ee;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:var(--green);border-radius:20px}
+.card-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:15px}.people{display:flex;align-items:center}.person{width:26px;height:26px;border-radius:50%;border:2px solid white;background:#e7d9c7;display:grid;place-items:center;font-size:10px;margin-left:-6px}.person:first-child{margin-left:0}
+.two-col{display:grid;grid-template-columns:1.25fr .75fr;gap:17px}.panel{padding:21px}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.activity{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #eef2ee}.activity:last-child{border:0}.activity-icon{width:36px;height:36px;border-radius:12px;background:var(--mint);display:grid;place-items:center}.activity b{font-size:13px}.activity p{margin:2px 0 0;color:var(--muted);font-size:11px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:750;color:#49645a}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink);outline:none}.field input:focus,.field select:focus{border-color:#7bb99b;box-shadow:0 0 0 3px #dff2e8}
+.notice{padding:13px 15px;background:#f1f8f2;border:1px solid #e1eee3;border-radius:13px;color:#567267;font-size:12px;margin:15px 0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{padding:8px 13px;border-radius:30px;background:white;border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700}.tab.active{background:var(--green);color:white;border-color:var(--green)}
+.order-layout{display:grid;grid-template-columns:1.3fr .7fr;gap:17px}.menu-item{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid #edf1ed}.menu-item:last-child{border:0}.menu-left{display:flex;align-items:center;gap:12px}.dish{width:48px;height:48px;background:#fff3e6;border-radius:13px;display:grid;place-items:center;font-size:23px}.menu-item small{display:block;color:var(--muted);font-size:11px}.price{font-weight:800;font-size:13px}.qty{display:flex;align-items:center;gap:9px}.qty button{width:27px;height:27px;border-radius:8px;background:var(--green2);color:var(--green);font-weight:900}
+.cart-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #edf1ed;font-size:12px}.cart-total{display:flex;justify-content:space-between;font-weight:800;margin-top:14px}
+.order-status{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:#e5a34d}
+.profile-head{display:flex;align-items:center;gap:16px}.profile-big{width:65px;height:65px;border-radius:22px;background:#f6dfc9;display:grid;place-items:center;font-size:25px;font-weight:800;color:#81512e}
+.empty{text-align:center;padding:40px 15px;color:var(--muted)}.empty div{font-size:36px;margin-bottom:8px}
+.toast{position:fixed;bottom:22px;right:22px;background:#18352d;color:white;padding:12px 17px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.2s;z-index:20;pointer-events:none;font-size:13px}.toast.show{opacity:1;transform:translateY(0)}
+.mobile-nav{display:none}
+footer{text-align:center;color:#8a9a92;font-size:11px;padding:25px}
+@media(max-width:1000px){.sidebar{width:215px}.grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.content{padding:26px 24px}}
+@media(max-width:720px){.app{display:block}.sidebar{display:none}.topbar{height:62px;padding:0 17px}.content{padding:20px 15px 90px}.hero{grid-template-columns:1fr;padding:23px}.hero-art{min-height:125px}.food-circle{width:130px;height:130px;font-size:62px}.float1{left:5%;top:0}.float2{right:5%;bottom:0}.stats{gap:9px}.stat{padding:13px}.stat strong{font-size:21px}.grid,.two-col,.order-layout{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.section-head{align-items:start}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:10;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom))}.mobile-nav button{background:transparent;color:var(--muted);font-size:10px;display:grid;gap:2px;justify-items:center}.mobile-nav button.active{color:var(--green);font-weight:800}.mobile-nav span{font-size:19px}.top-actions .hello{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+ <div class="brand"><div class="logo">🥗</div><div><strong>MealMates</strong><small>Order Together. Save Together.</small></div></div>
+ <nav class="nav">
+  <button class="active" data-page="home"><span class="ico">⌂</span>Overview</button>
+  <button data-page="explore"><span class="ico">⌕</span>Explore groups</button>
+  <button data-page="create"><span class="ico">＋</span>Create a group</button>
+  <button data-page="orders"><span class="ico">▤</span>My orders</button>
+  <button data-page="profile"><span class="ico">◉</span>My profile</button>
+ </nav>
+ <div class="side-note"><b>💡 Small order? Big savings.</b><p>Join people nearby and reach the delivery target together. No unnecessary add-ons.</p><button class="btn ghost small" onclick="navigate('explore')">Find a group</button></div>
+</aside>
+<main class="main">
+<header class="topbar"><div class="location">📍 <span>Delivery area</span> <b>Indiranagar, Bengaluru</b> <span>⌄</span></div><div class="top-actions"><span class="hello">Good evening, Aastha</span><div class="avatar">A</div></div></header>
+<div class="content">
+<section class="page active" id="home">
+ <div class="hero"><div><div class="eyebrow">Your neighbourhood, one shared cart</div><h1>Good food tastes better when you <span style="color:var(--green)">order together.</span></h1><p class="sub">Team up with people nearby, meet restaurant minimums and split delivery costs fairly — without ordering more than you need.</p><div class="actions"><button class="btn primary" onclick="navigate('explore')">Explore nearby groups →</button><button class="btn secondary" onclick="navigate('create')">＋ Start a group</button></div></div><div class="hero-art"><div class="food-circle">🍱</div><div class="floating float1">✨ Shared savings</div><div class="floating float2">🤝 Neighbour-powered</div></div></div>
+ <div class="stats">
+  <div class="stat"><span>Groups near you</span><strong id="statGroups">8</strong><em>● Open to join</em></div>
+  <div class="stat"><span>Your saved delivery fees</span><strong id="statSavings">₹145</strong><em>↑ This month</em></div>
+  <div class="stat"><span>Orders completed</span><strong>6</strong><em>Nice teamwork!</em></div>
+  <div class="stat"><span>Reliability score</span><strong>96<span style="font-size:14px">/100</span></strong><em>● Trusted mate</em></div>
+ </div>
+ <div class="section-head"><div><h2>Groups around you</h2><p>People nearby are building their next shared order.</p></div><button class="btn secondary small" onclick="navigate('explore')">See all groups</button></div>
+ <div class="grid" id="homeGroups"></div>
+ <div class="section-head"><div><h2>Your MealMates activity</h2><p>A little teamwork goes a long way.</p></div></div>
+ <div class="two-col"><div class="panel"><div class="panel-head"><h3>Recent activity</h3><span class="pill">This week</span></div>
+  <div class="activity"><div class="activity-icon">🍜</div><div><b>Your group order was completed</b><p>Ramen House · Yesterday · You saved ₹35</p></div></div>
+  <div class="activity"><div class="activity-icon">🤝</div><div><b>You joined a neighbourhood group</b><p>Friday Feast · 2 days ago</p></div></div>
+  <div class="activity"><div class="activity-icon">⭐</div><div><b>Your reliability score increased</b><p>Responsible participation matters.</p></div></div>
+ </div><div class="panel"><div class="panel-head"><h3>How MealMates works</h3><span>🌱</span></div>
+  <div class="activity"><div class="activity-icon">📍</div><div><b>Find your people</b><p>Discover open groups in your area.</p></div></div>
+  <div class="activity"><div class="activity-icon">🛒</div><div><b>Add only what you want</b><p>Your items and bill stay identifiable.</p></div></div>
+  <div class="activity"><div class="activity-icon">💚</div><div><b>Save together</b><p>Reach the target and share delivery fairly.</p></div></div>
+ </div></div>
+</section>
+
+<section class="page" id="explore">
+ <div class="eyebrow">Neighbourhood discovery</div><h1>Find your food crew.</h1><p class="sub">Join an open group nearby and add your favourites to the shared cart.</p>
+ <div class="section-head"><div class="tabs"><button class="tab active" data-filter="all">All groups</button><button class="tab" data-filter="almost">Almost at target</button><button class="tab" data-filter="new">New groups</button></div><span class="meta">📍 Indiranagar · Demo area</span></div>
+ <div class="grid" id="exploreGroups"></div>
+</section>
+
+<section class="page" id="create">
+ <div class="eyebrow">Bring the neighbourhood together</div><h1>Start a shared order.</h1><p class="sub">Set up the group. Others nearby can join and add their own items.</p>
+ <div class="panel" style="max-width:760px;margin-top:22px">
+  <form id="createForm" class="form-grid">
+   <div class="field full"><label>Group name</label><input id="groupName" placeholder="e.g. Friday dinner crew" required maxlength="45"></div>
+   <div class="field"><label>Restaurant / food place</label><input id="restaurant" placeholder="e.g. Green Bowl Cafe" required></div>
+   <div class="field"><label>Food preference</label><select id="foodType"><option>Any cuisine</option><option>North Indian</option><option>South Indian</option><option>Chinese</option><option>Healthy bowls</option><option>Pizza & burgers</option></select></div>
+   <div class="field"><label>Order target (₹)</label><input id="target" type="number" min="100" value="500" required></div>
+   <div class="field"><label>Estimated delivery fee (₹)</label><input id="fee" type="number" min="0" value="40" required></div>
+   <div class="field"><label>Group closes in</label><select id="duration"><option>15 minutes</option><option>30 minutes</option><option>45 minutes</option><option>1 hour</option></select></div>
+   <div class="field"><label>Discovery radius</label><select id="radius"><option>500 metres</option><option selected>1 kilometre</option><option>2 kilometres</option><option>3 kilometres</option></select></div>
+   <div class="field full"><label>Pickup / handover note</label><input id="handover" placeholder="e.g. Main apartment lobby (optional)"></div>
+   <div class="field full"><div class="notice">🔒 Cart-lock reminder: participants should review their items before the group closes. This demo simulates the timer and group workflow; it does not place a real restaurant order.</div></div>
+   <div class="field full"><button class="btn primary" type="submit">Create my group →</button></div>
+  </form>
+ </div>
+</section>
+
+<section class="page" id="orders">
+ <div class="eyebrow">Your shared-order space</div><h1>My orders.</h1><p class="sub">Keep track of the groups you have joined and your demo order history.</p>
+ <div class="section-head"><div class="tabs"><button class="tab active">All</button><button class="tab">Active</button><button class="tab">Completed</button></div></div>
+ <div class="grid" id="myOrders"></div>
+</section>
+
+<section class="page" id="profile">
+ <div class="eyebrow">Your MealMates identity</div><h1>My profile.</h1>
+ <div class="panel" style="margin-top:22px;max-width:800px">
+  <div class="profile-head"><div class="profile-big">A</div><div><h2>Aastha Shetty</h2><div class="meta">MealMates member · Indiranagar, Bengaluru</div><span class="pill" style="margin-top:8px">⭐ 96 / 100 reliability</span></div></div>
+  <div class="stats" style="margin:25px 0 12px"><div class="stat"><span>Orders completed</span><strong>6</strong></div><div class="stat"><span>Delivery savings</span><strong>₹145</strong></div><div class="stat"><span>Groups joined</span><strong>9</strong></div><div class="stat"><span>On-time participation</span><strong>100%</strong></div></div>
+  <h3 style="margin:22px 0 8px">Your reliability score</h3><p class="meta">A fair participation indicator based on completed group orders and responsible updates. Genuine emergencies should have a way to be reviewed — a score should not be a punishment.</p>
+  <div class="notice">This is a sample profile for the Phase One prototype. Authentication, verified history, appeals and cross-device account data are planned for Phase Two.</div>
+  <button class="btn secondary" onclick="toast('Profile editing will be connected in Phase Two.')">Edit profile</button>
+ </div>
+</section>
+
+<section class="page" id="groupDetail">
+ <button class="btn secondary small" onclick="navigate('explore')">← Back to groups</button>
+ <div class="section-head"><div><div class="eyebrow">Shared group cart</div><h1 id="detailTitle">Group order</h1><p class="sub" id="detailSub"></p></div><span class="pill orange" id="timerPill">● Cart open</span></div>
+ <div class="order-layout">
+  <div class="panel"><div class="panel-head"><h3>Menu preview</h3><span class="meta">Sample items · demo</span></div><div id="menuItems"></div>
+   <div class="notice">When an item is unavailable, the participant who added it should be notified and offered a replacement or removal. This demo lets you simulate that case.</div>
+  </div>
+  <div class="panel"><div class="panel-head"><h3>Shared cart</h3><span class="pill" id="cartCount">0 items</span></div><div id="cartRows"><div class="empty"><div>🛒</div>Your cart is waiting for something tasty.</div></div><div class="cart-total"><span>Your demo total</span><span id="cartTotal">₹0</span></div>
+   <div class="progress-wrap"><div class="progress-label"><span>Group target progress</span><b id="detailProgressText">₹0 / ₹500</b></div><div class="progress"><i id="detailProgress" style="width:0%"></i></div></div>
+   <div class="notice" id="feeNotice">Delivery fee is an estimate and will be split fairly in a real checkout.</div>
+   <button class="btn primary" style="width:100%" onclick="lockCart()">Lock demo cart</button>
+   <button class="btn secondary" style="width:100%;margin-top:8px" onclick="simulateDropout()">Simulate participant dropout</button>
+   <button class="btn secondary" style="width:100%;margin-top:8px" onclick="simulateOutOfStock()">Simulate out-of-stock item</button>
+  </div>
+ </div>
+ <div class="panel" style="margin-top:17px"><div class="panel-head"><h3>People in this group</h3><span class="meta" id="memberCount">3 participants</span></div><div id="members" class="people"></div><div class="meta" style="margin-top:12px">Participant changes update the demo total and target progress. In Phase Two this becomes a live shared cart.</div></div>
+</section>
+</div>
+<footer>MealMates · Phase One interactive website prototype · Order Together. Save Together.</footer>
+</main>
+</div>
+<nav class="mobile-nav">
+ <button class="active" data-page="home"><span>⌂</span>Home</button><button data-page="explore"><span>⌕</span>Explore</button><button data-page="create"><span>＋</span>Create</button><button data-page="orders"><span>▤</span>Orders</button><button data-page="profile"><span>◉</span>Profile</button>
+</nav>
+<div class="toast" id="toast"></div>
+<script>
+const groups=[
+ {id:1,name:"Friday Feast Crew",restaurant:"The Green Bowl Cafe",type:"Healthy bowls",target:700,total:560,fee:40,people:4,close:"12 min",status:"almost",emoji:"🥗",members:["A","R","S","M"],items:[{name:"Paneer power bowl",price:220,emoji:"🥙"},{name:"Avocado salad",price:190,emoji:"🥑"},{name:"Lemon rice bowl",price:150,emoji:"🍚"}]},
+ {id:2,name:"Late Lunch Legends",restaurant:"Namma Dosa Corner",type:"South Indian",target:500,total:310,fee:35,people:3,close:"24 min",status:"new",emoji:"🥞",members:["K","P","A"],items:[{name:"Masala dosa",price:110,emoji:"🥞"},{name:"Idli vada combo",price:95,emoji:"🍘"},{name:"Ghee podi dosa",price:145,emoji:"🫓"}]},
+ {id:3,name:"Pizza Study Break",restaurant:"Crust & Co.",type:"Pizza & burgers",target:900,total:810,fee:50,people:5,close:"8 min",status:"almost",emoji:"🍕",members:["N","A","J","T","R"],items:[{name:"Margherita pizza",price:299,emoji:"🍕"},{name:"Garlic bread",price:149,emoji:"🥖"},{name:"Farmhouse pizza",price:349,emoji:"🍕"}]},
+ {id:4,name:"Comfort Food Club",restaurant:"Spice Route Kitchen",type:"North Indian",target:650,total:270,fee:45,people:2,close:"38 min",status:"new",emoji:"🍛",members:["D","V"],items:[{name:"Paneer wrap",price:180,emoji:"🌯"},{name:"Dal khichdi",price:160,emoji:"🍲"},{name:"Jeera rice",price:120,emoji:"🍚"}]},
+ {id:5,name:"Sushi Sunday",restaurant:"Maki Street",type:"Any cuisine",target:1000,total:640,fee:55,people:4,close:"19 min",status:"all",emoji:"🍣",members:["A","S","L","B"],items:[{name:"Veg sushi roll",price:260,emoji:"🍣"},{name:"Crispy tofu",price:210,emoji:"🍤"},{name:"Miso soup",price:120,emoji:"🥣"}]},
+ {id:6,name:"Chai & Chat",restaurant:"Tiffin Tales",type:"Any cuisine",target:400,total:220,fee:30,people:2,close:"42 min",status:"new",emoji:"☕",members:["P","M"],items:[{name:"Veg puff combo",price:90,emoji:"🥐"},{name:"Masala chai",price:45,emoji:"☕"},{name:"Poha bowl",price:95,emoji:"🥣"}]}
+];
+let activeGroup=null,cart=[],locked=false,joined=new Set([1]),created=[],savings=145,toastTimer;
+function toast(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600)}
+function navigate(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let el=document.getElementById(page);if(el)el.classList.add('active');document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+function allGroups(){return [...created,...groups]}
+function groupCard(g){let pct=Math.min(100,Math.round(g.total/g.target*100));return `<article class="card"><div class="card-top"><div class="restaurant-icon">${g.emoji}</div><span class="pill ${pct>85?'orange':''}">${pct>85?'Almost there':'Open to join'}</span></div><h3>${g.name}</h3><div class="meta">${g.restaurant} · ${g.type}</div><div class="progress-wrap"><div class="progress-label"><span>Order progress</span><b>₹${g.total} / ₹${g.target}</b></div><div class="progress"><i style="width:${pct}%"></i></div></div><div class="card-bottom"><div class="people">${g.members.slice(0,4).map((m,i)=>`<span class="person" style="background:${['#f1dfcf','#dcebe0','#e9e0f4','#f7e7c5'][i%4]}">${m}</span>`).join('')}<span class="meta" style="margin-left:8px">${g.people} people</span></div><button class="btn primary small" onclick="openGroup(${g.id})">${joined.has(g.id)?'View cart':'Join group'}</button></div><div class="meta" style="margin-top:10px">⏱ Closes in ${g.close} · Est. delivery ₹${g.fee}</div></article>`}
+function renderGroups(){document.getElementById('homeGroups').innerHTML=allGroups().slice(0,3).map(groupCard).join('');let filter=document.querySelector('.tab.active[data-filter]')?.dataset.filter||'all';let list=allGroups().filter(g=>filter==='all'||(filter==='almost'?g.total/g.target>=.8:g.status==='new'));document.getElementById('exploreGroups').innerHTML=list.map(groupCard).join('')||'<div class="empty">No groups match this filter yet.</div>';document.getElementById('statGroups').textContent=allGroups().length;}
+document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderGroups()}));
+function openGroup(id){activeGroup=allGroups().find(g=>g.id===id);if(!activeGroup)return;joined.add(id);locked=false;cart=[];document.getElementById('detailTitle').textContent=activeGroup.name;document.getElementById('detailSub').textContent=activeGroup.restaurant+' · '+activeGroup.type+' · '+activeGroup.people+' participants';document.getElementById('timerPill').textContent='● Cart open';renderDetail();navigate('groupDetail')}
+function renderDetail(){let g=activeGroup;document.getElementById('menuItems').innerHTML=g.items.map((it,i)=>`<div class="menu-item"><div class="menu-left"><div class="dish">${it.emoji}</div><div><b>${it.name}</b><small>Freshly prepared · sample menu</small><span class="price">₹${it.price}</span></div></div><div class="qty"><button onclick="changeQty(${i},-1)">−</button><b>${cart.filter(x=>x.index===i).length}</b><button onclick="changeQty(${i},1)">+</button></div></div>`).join('');
+let total=cart.reduce((s,x)=>s+x.price,0);document.getElementById('cartRows').innerHTML=cart.length?cart.map((x,i)=>`<div class="cart-row"><span>${x.emoji} ${x.name}</span><b>₹${x.price}</b></div>`).join(''):'<div class="empty"><div>🛒</div>Your cart is waiting for something tasty.</div>';document.getElementById('cartCount').textContent=cart.length+' items';document.getElementById('cartTotal').textContent='₹'+total;let groupTotal=g.total+total,pct=Math.min(100,Math.round(groupTotal/g.target*100));document.getElementById('detailProgressText').textContent='₹'+groupTotal+' / ₹'+g.target;document.getElementById('detailProgress').style.width=pct+'%';document.getElementById('feeNotice').textContent='Estimated delivery fee ₹'+g.fee+' · Your share is calculated at checkout in the full product.';document.getElementById('members').innerHTML=g.members.map((m,i)=>`<span class="person" style="width:34px;height:34px;font-size:12px;background:${['#f1dfcf','#dcebe0','#e9e0f4','#f7e7c5'][i%4]}">${m}</span>`).join('');document.getElementById('memberCount').textContent=g.members.length+' participants';}
+function changeQty(i,d){if(locked){toast('This cart is locked.');return}if(d>0){let it=activeGroup.items[i];cart.push({...it,index:i})}else{let idx=cart.findIndex(x=>x.index===i);if(idx>=0)cart.splice(idx,1)}renderDetail()}
+function lockCart(){if(!cart.length){toast('Add an item before locking your cart.');return}locked=true;document.getElementById('timerPill').textContent='🔒 Demo cart locked';toast('Cart locked for this demo. No real order was placed.')}
+function simulateDropout(){if(activeGroup.members.length<=1){toast('No other participants to remove.');return}activeGroup.members.pop();activeGroup.people=activeGroup.members.length;activeGroup.total=Math.max(0,activeGroup.total-90);renderDetail();renderGroups();toast('Demo: a participant left. Group total recalculated.')}
+function simulateOutOfStock(){if(!cart.length){toast('Add an item first to simulate an out-of-stock item.');return}let removed=cart.pop();renderDetail();toast(removed.name+' marked unavailable. Item removed from demo cart.')}
+document.getElementById('createForm').addEventListener('submit',e=>{e.preventDefault();let g={id:Date.now(),name:document.getElementById('groupName').value,restaurant:document.getElementById('restaurant').value,type:document.getElementById('foodType').value,target:+document.getElementById('target').value,total:0,fee:+document.getElementById('fee').value,people:1,close:document.getElementById('duration').value,status:'new',emoji:'🍽️',members:['A'],items:[{name:'Chef special bowl',price:180,emoji:'🥗'},{name:'House special wrap',price:160,emoji:'🌯'},{name:'Fresh lemonade',price:70,emoji:'🍋'}]};created.unshift(g);joined.add(g.id);e.target.reset();renderGroups();toast('Your demo group has been created!');navigate('explore')});
+function renderOrders(){let mine=allGroups().filter(g=>joined.has(g.id));document.getElementById('myOrders').innerHTML=mine.length?mine.map(g=>`<article class="card"><div class="card-top"><div class="restaurant-icon">${g.emoji}</div><span class="pill">Joined</span></div><h3>${g.name}</h3><div class="meta">${g.restaurant}</div><div class="progress-wrap"><div class="progress-label"><span>Group target</span><b>₹${g.total} / ₹${g.target}</b></div><div class="progress"><i style="width:${Math.min(100,g.total/g.target*100)}%"></i></div></div><button class="btn secondary small" onclick="openGroup(${g.id})">Open group cart</button></article>`).join(''):'<div class="empty">You have not joined a group yet.</div>'}
+const observer=new MutationObserver(()=>{if(document.getElementById('orders').classList.contains('active'))renderOrders()});observer.observe(document.getElementById('orders'),{attributes:true,attributeFilter:['class']});
+renderGroups();renderOrders();
+</script>
+</body></html>
